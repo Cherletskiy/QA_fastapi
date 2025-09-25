@@ -10,9 +10,7 @@ logger = setup_logger(__name__)
 
 
 class Base(DeclarativeBase, AsyncAttrs):
-    @property
-    def id_dict(self):
-        return {"id": self.id}
+    pass
 
 
 class Question(Base):
@@ -30,15 +28,6 @@ class Question(Base):
         cascade="all, delete-orphan",
         passive_deletes=True
     )
-
-    @property
-    def dict(self):
-        created_str = self.created_at.isoformat() if self.created_at else "unknown"
-        return {
-            "id": self.id,
-            "text": self.text,
-            "created_at": created_str
-        }
 
 
 class Answer(Base):
@@ -59,16 +48,6 @@ class Answer(Base):
     question: Mapped["Question"] = relationship("Question", back_populates="answers")
     user: Mapped["User"] = relationship("User", back_populates="answers")
 
-    @property
-    def dict(self):
-        created_str = self.created_at.isoformat() if self.created_at else "unknown"
-        return {
-            "id": self.id,
-            "question_id": self.question_id,
-            "user_id": self.user_id,
-            "text": self.text,
-            "created_at": created_str
-        }
 
 class User(Base):
     __tablename__ = "users"
@@ -82,13 +61,3 @@ class User(Base):
     password: Mapped[str] = mapped_column(String(255), nullable=False)
 
     answers: Mapped[list["Answer"]] = relationship("Answer", back_populates="user")
-
-    @property
-    def dict(self):
-        created_str = self.created_at.isoformat() if self.created_at else "unknown"
-        return {
-            "id": self.id,
-            "username": self.username,
-            "email": self.email,
-            "created_at": created_str
-        }
