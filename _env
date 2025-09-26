@@ -1,0 +1,7 @@
+DB_NAME=postgres
+DB_USER=postgres
+DB_PWD=postgres
+DB_HOST=127.0.0.1
+DB_PORT=5431
+PGADMIN_DEFAULT_EMAIL=admin@admin.com
+PGADMIN_DEFAULT_PASSWORD=admin

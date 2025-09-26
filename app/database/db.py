@@ -21,7 +21,7 @@ DATABASE_CONFIG = {
 }
 
 
-DSN = (f"postgresql+asyncpg://{DATABASE_CONFIG["user"]}:{DATABASE_CONFIG["password"]}@"
+DSN = (f"postgresql+asyncpg://{DATABASE_CONFIG['user']}:{DATABASE_CONFIG['password']}@"
        f"{DATABASE_CONFIG['host']}:{DATABASE_CONFIG['port']}/{DATABASE_CONFIG['database']}")
 
 engine = create_async_engine(
@@ -37,9 +37,6 @@ async_session_factory = async_sessionmaker(
     autoflush=False,
     class_=AsyncSession
 )
-
-
-
 
 
 async def init_db():
