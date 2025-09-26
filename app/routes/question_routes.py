@@ -7,10 +7,10 @@ from app.services.question_service import QuestionService
 from app.schemes.question_scheme import PaginatedQuestionsResponse
 
 
-router = APIRouter(prefix="/api/v1/questions", tags=["questions"])
+router = APIRouter(prefix="/api/v1/questions", tags=["questions"], redirect_slashes=False)
 
 
-@router.post("/", response_model=QuestionResponse, status_code=status.HTTP_201_CREATED,
+@router.post("", response_model=QuestionResponse, status_code=status.HTTP_201_CREATED,
              summary="Create question")
 async def create_question(
     question: QuestionCreate,
@@ -35,7 +35,7 @@ async def get_question(
     )
 
 
-@router.get("/", response_model=PaginatedQuestionsResponse, summary="Get all questions with pagination")
+@router.get("", response_model=PaginatedQuestionsResponse, summary="Get all questions with pagination")
 async def get_questions(
     pagination: PaginationParams = Depends(),
     session: AsyncSession = Depends(get_async_session),

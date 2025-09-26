@@ -6,7 +6,7 @@ from app.schemes.answer_scheme import AnswerResponse, AnswerCreate
 from app.services.answer_service import AnswerService
 
 
-router = APIRouter(prefix="/api/v1", tags=["answers"])
+router = APIRouter(prefix="/api/v1", tags=["answers"], redirect_slashes=False)
 
 
 @router.post("/questions/{question_id}/answers", response_model=AnswerResponse, status_code=status.HTTP_201_CREATED, summary="Create answer")
