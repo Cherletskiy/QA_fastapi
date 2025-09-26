@@ -29,16 +29,16 @@ class QuestionRepository:
 
     async def get_all(self, session: AsyncSession,
                       offset: int = 0, limit: int = 100) -> tuple[list[Question], int]:
-        limit = min(limit, 100)
-        offset = max(offset, 0)
+            limit = min(limit, 100)
+            offset = max(offset, 0)
 
-        stmt = select(Question).offset(offset).limit(limit)
-        result = await session.execute(stmt)
-        questions_list = result.scalars().all()
+            stmt = select(Question).offset(offset).limit(limit)
+            result = await session.execute(stmt)
+            questions_list = result.scalars().all()
 
-        total_count = await session.scalar(select(func.count(Question.id)))
+            total_count = await session.scalar(select(func.count(Question.id)))
 
-        return questions_list, total_count
+            return questions_list, total_count
 
     async def delete(self, db_question: Question, session: AsyncSession) -> None:
         try:

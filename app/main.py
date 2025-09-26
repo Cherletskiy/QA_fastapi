@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from app.database.db import init_db, close_db
 from app.logging_config import setup_logger
-from app.routes import question_routes
+from app.routes import question_routes, answer_routes
 from app.errors import AppError
 
 
@@ -61,3 +61,4 @@ async def root():
 
 # Регистрация маршрутов
 app.include_router(question_routes.router)
+app.include_router(answer_routes.router)

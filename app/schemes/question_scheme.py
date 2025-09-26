@@ -1,6 +1,8 @@
 from pydantic import BaseModel, ConfigDict, field_validator, Field
 from datetime import datetime
 
+from app.schemes.answer_scheme import AnswerPaginationResponse
+
 
 class QuestionCreate(BaseModel):
     text: str
@@ -34,3 +36,7 @@ class PaginatedQuestionsResponse(BaseModel):
     items: list[QuestionResponse]
     limit: int
     offset: int
+
+
+class QuestionAnswerResponse(QuestionResponse):
+    answers: AnswerPaginationResponse
