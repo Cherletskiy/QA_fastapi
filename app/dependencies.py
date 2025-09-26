@@ -6,6 +6,10 @@ from app.repository.answer_repository import AnswerRepository
 from app.repository.question_repository import QuestionRepository
 from app.services.answer_service import AnswerService
 from app.services.question_service import QuestionService
+from app.logging_config import setup_logger
+
+
+logger = setup_logger(__name__)
 
 
 def get_answer_service() -> AnswerService:
@@ -25,8 +29,9 @@ async def get_async_session() -> AsyncSession:
     async with async_session_factory() as session:
         try:
             yield session
-        except Exception:
+        except Exception as e:
             await session.rollback()
+            logger.error(f"Error in async session: {e}")
             raise
         finally:
             await session.close()

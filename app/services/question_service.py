@@ -8,11 +8,23 @@ from app.services.answer_service import AnswerService
 
 
 class QuestionService:
+    """Service for question business logic."""
+
     def __init__(self, repository: QuestionRepository, answer_service: AnswerService):
         self.repository = repository
         self.answer_service = answer_service
 
     async def create_question(self, question_data: QuestionCreate, session: AsyncSession) -> QuestionResponse:
+        """
+        Create a new question.
+
+        Args:
+            question_data: Question creation data
+            session: Database session
+
+        Returns:
+            Created question response
+        """
         db_question = await self.repository.create(question_data, session)
         return QuestionResponse.model_validate(db_question)
 
@@ -23,12 +35,28 @@ class QuestionService:
             limit: int = 10,
             offset: int = 0,
     ) -> QuestionAnswerResponse:
-        db_question = await self.repository.get_by_id(session=session, question_id=question_id)
+        """
+        Get question with paginated answers.
+
+        Args:
+            question_id: ID of the question
+            session: Database session
+            limit: Answers pagination limit
+            offset: Answers pagination offset
+
+        Returns:
+            Question with answers response
+
+        Raises:
+            NotFoundError: If question doesn't exist
+        """
+        db_question = await self.repository.get_by_id(question_id=question_id, session=session)
         if not db_question:
             raise NotFoundError(f"Question with id={question_id} not found")
 
-        answers_page = await self.answer_service.get_answers(session=session, question_id=question_id, limit=limit,
-                                                             offset=offset)
+        answers_page = await self.answer_service.get_answers(
+            session=session, question_id=question_id, limit=limit, offset=offset
+        )
 
         return QuestionAnswerResponse(
             id=db_question.id,
@@ -39,6 +67,17 @@ class QuestionService:
 
     async def get_all_questions(self, session: AsyncSession,
                                 offset: int = 0, limit: int = 10) -> PaginatedQuestionsResponse:
+        """
+        Get paginated list of all questions.
+
+        Args:
+            session: Database session
+            offset: Pagination offset
+            limit: Pagination limit
+
+        Returns:
+            Paginated questions response
+        """
         db_questions, total = await self.repository.get_all(session=session, limit=limit, offset=offset)
         questions = [QuestionResponse.model_validate(question) for question in db_questions]
 
@@ -50,6 +89,17 @@ class QuestionService:
         )
 
     async def delete_question(self, question_id: int, session: AsyncSession) -> None:
+        """
+        Delete question by ID.
+
+        Args:
+            question_id: ID of the question to delete
+            session: Database session
+
+        Raises:
+            NotFoundError: If question doesn't exist
+            ConflictError: If deletion fails
+        """
         db_question = await self.repository.get_by_id(question_id, session)
         if not db_question:
             raise NotFoundError(f"Question with id {question_id} not found")

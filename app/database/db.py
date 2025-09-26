@@ -26,7 +26,7 @@ DSN = (f"postgresql+asyncpg://{DATABASE_CONFIG["user"]}:{DATABASE_CONFIG["passwo
 
 engine = create_async_engine(
     url=DSN,
-    echo=True,
+    echo=False,
     pool_size=5,
     max_overflow=10
 )
