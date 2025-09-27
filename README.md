@@ -87,6 +87,17 @@ curl http://localhost:8000/
 # Запуск тестов
 docker-compose exec app python test_api.py
 ```
+**Доступ к pgAdmin**:
+   - Откройте `http://localhost:8080` в браузере.
+   - Войдите с:
+     - Email: `admin@admin.com`
+     - Пароль: `admin`
+   - Добавьте новый сервер:
+     - Хост: `db`
+     - Порт: `5432`
+     - Имя пользователя: `postgres`
+     - Пароль: `postgres`
+     - База данных: `postgres`
 
 ## 🗄 Структура проекта
 
@@ -167,9 +178,9 @@ python test_api.py
 
 ```env
 # Database
-DB_HOST=db
+DB_HOST=127.0.0.1
 DB_PORT=5432
-DB_NAME=qa_fastapi
+DB_NAME=postgres
 DB_USER=postgres
 DB_PWD=postgres
 
@@ -238,39 +249,3 @@ docker-compose exec app alembic upgrade head
 ```bash
 docker-compose exec app alembic downgrade -1
 ```
-
-## 🤝 Разработка
-
-### Локальная разработка
-
-1. **Установите зависимости:**
-```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate    # Windows
-pip install -r requirements.txt
-```
-
-2. **Запустите БД:**
-```bash
-docker-compose up db -d
-```
-
-3. **Запустите приложение:**
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-## 📄 Соответствие ТЗ
-
-| Требование | Статус | Примечания |
-|-----------|--------|------------|
-| Модели Question и Answer | ✅ | Все поля соответствуют ТЗ |
-| CRUD API для вопросов | ✅ | Полная реализация |
-| CRUD API для ответов | ✅ | Полная реализация |
-| Валидация данных | ✅ | Pydantic с кастомными валидаторами |
-| Каскадное удаление | ✅ | ON DELETE CASCADE |
- PostgreSQL + ORM | ✅ | SQLAlchemy 2.0 + asyncpg |
-| Миграции | ✅ | Alembic с autogenerate |
-| Docker | ✅ | Полная контейнеризация |
-| Логирование | ✅ | Структурированные логи |
